@@ -583,7 +583,7 @@ private fun RcColumnScope.stickyBookGigsButton(scale: FestiveScale) {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(_root_ide_package_.com.sdevprem.demo.FestiveColors.ctaBGColor)
+            .background(FestiveColors.ctaBGColor)
             .padding(scale.dp(12f))
             .fillMaxWidth()
             .clip(rounded(scale.dp(6f).value))
