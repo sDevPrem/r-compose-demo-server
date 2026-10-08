@@ -57,7 +57,7 @@ fun main(args: Array<String>) {
                 val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
                 val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
 
-                val bytes = main2(width, height)
+                val bytes = main2(width, height, density)
                 println("bytes: ${bytes.size}")
                 call.respondBytes(
                     bytes = bytes,
@@ -134,7 +134,7 @@ private fun main3(): ByteArray {
     return binaryPayload
 }
 
-fun main2(width: Int, height: Int): ByteArray {
+fun main2(width: Int, height: Int, density: Float): ByteArray {
     var writer: RemoteComposeWriter? = null
 
     val profile = Profile(
@@ -146,6 +146,7 @@ fun main2(width: Int, height: Int): ByteArray {
             profile,
             RemoteComposeWriter.hTag(Header.DOC_WIDTH, info.width),
             RemoteComposeWriter.hTag(Header.DOC_HEIGHT, info.height),
+            RemoteComposeWriter.hTag(Header.DOC_DENSITY_AT_GENERATION, density),
             RemoteComposeWriter.hTag(Header.DOC_CONTENT_DESCRIPTION, ""),
             RemoteComposeWriter.hTag(Header.DOC_PROFILES, 0),
         )
