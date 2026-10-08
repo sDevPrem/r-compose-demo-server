@@ -57,7 +57,7 @@ fun main(args: Array<String>) {
                 val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
                 val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
 
-                val bytes = main2(width, height, density)
+                val bytes = festivePage(width, height, density)
                 println("bytes: ${bytes.size}")
                 call.respondBytes(
                     bytes = bytes,
