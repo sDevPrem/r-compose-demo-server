@@ -102,6 +102,7 @@ fun festivePage(width: Int, height: Int, density: Float): ByteArray {
                     )
 
                     liveCountdown(scale)
+                    progressSummary(scale)
                     earningSection(scale)
                     benefitsSection(scale)
                     bazaarSection(scale)
@@ -177,6 +178,90 @@ private fun RcRowScope.countdownSeparator(scale: FestiveScale) {
             bottom = scale.dp(16f).value,
         ),
     )
+}
+
+private fun RcColumnScope.progressSummary(scale: FestiveScale) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = scale.dp(12f).value,
+                end = scale.dp(12f).value,
+                top = scale.dp(22f).value,
+            )
+            .wrapContentHeight()
+            .padding(bottom = scale.dp(16f).value)
+            .clip(rounded(scale.dp(16f).value))
+            .background(FestiveColors.card)
+            .border(scale.dp(1f).value, scale.dp(16f).value, FestiveColors.gold, 2)
+            .padding(bottom = scale.dp(16f).value),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = scale.dp(16f).value, end = scale.dp(16f).value),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontal = RcRowHorizontalPositioning.SpaceBetween,
+                vertical = RcVerticalPositioning.Center,
+            ) {
+                Text(
+                    text = "Your progress",
+                    color = FestiveColors.cream,
+                    fontSize = scale.sp(20f),
+                    fontWeight = RcFontWeight.Bold,
+                )
+                Text(
+                    text = "›",
+                    color = FestiveColors.cream,
+                    fontSize = scale.sp(42f),
+                    fontWeight = RcFontWeight.Bold,
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                vertical = RcVerticalPositioning.Top,
+            ) {
+                Text(
+                    text = "₹0",
+                    color = Color.white.rgb,
+                    fontSize = scale.sp(10f),
+                    fontWeight = RcFontWeight.Normal,
+                    modifier = Modifier.padding(top = scale.dp(2f).value, end = scale.dp(8f).value),
+                )
+
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontal = RcHorizontalPositioning.Center,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(scale.dp(12f))
+                            .clip(rounded(scale.dp(10f).value))
+                            .background(0xFFB80E13.toInt()),
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillParentMaxWidth(0.5f)
+                                .fillMaxHeight()
+                                .background(Color.white.rgb),
+                        )
+                    }
+                }
+
+                Text(
+                    text = "₹25,000",
+                    color = Color.white.rgb,
+                    fontSize = scale.sp(10f),
+                    fontWeight = RcFontWeight.Normal,
+                    modifier = Modifier.padding(top = scale.dp(2f).value, start = scale.dp(8f).value),
+                )
+            }
+        }
+    }
 }
 
 private fun RcColumnScope.earningSection(scale: FestiveScale) {
@@ -295,6 +380,7 @@ private fun RcColumnScope.actionPill(label: String, scale: FestiveScale) {
 }
 
 private fun RcColumnScope.bazaarSection(scale: FestiveScale) {
+    bazaarWaveSeparator(scale, isTopEdge = true)
     Column(
         modifier = Modifier
             .fillParentMaxWidth()
@@ -322,6 +408,55 @@ private fun RcColumnScope.bazaarSection(scale: FestiveScale) {
             bazaarProduct("Noise Nirvana", scale)
             Spacer(Modifier.width(scale.dp(8f)))
             bazaarProduct("Boat Nirvana", scale)
+        }
+    }
+    bazaarWaveSeparator(scale, isTopEdge = false)
+}
+
+private fun RcColumnScope.bazaarWaveSeparator(scale: FestiveScale, isTopEdge: Boolean) {
+    Box(modifier = Modifier.fillMaxWidth().height(scale.dp(24f))) {
+        Canvas(Modifier.fillMaxSize()) {
+            val width = scale.widthPx.toFloat()
+            val height = scale.dp(24f).value
+            val waveY = height * 0.5f
+            val amplitude = scale.dp(6f).value
+            val waveLength = scale.dp(48f).value.coerceAtLeast(1f)
+
+            applyPaint {
+                setStyle(RcPaintStyle.Fill)
+                setColor(FestiveColors.darkSection)
+            }
+            fun waveLine(path: RcDynamicPath) {
+                var x = 0f
+                var crestUp = true
+                while (x < width) {
+                    val nextX = (x + waveLength / 2f).coerceAtMost(width)
+                    path.quadTo(
+                        x + waveLength / 4f,
+                        waveY + if (crestUp) -amplitude else amplitude,
+                        nextX,
+                        waveY,
+                    )
+                    x = nextX
+                    crestUp = !crestUp
+                }
+            }
+
+            if (isTopEdge) {
+                val bottomPath = remotePath(0f, waveY)
+                waveLine(bottomPath)
+                bottomPath.lineTo(width, height)
+                bottomPath.lineTo(0f, height)
+                bottomPath.close()
+                drawPath(bottomPath.getPath())
+            } else {
+                val topPath = remotePath(0f, 0f)
+                topPath.lineTo(0f, waveY)
+                waveLine(topPath)
+                topPath.lineTo(width, 0f)
+                topPath.close()
+                drawPath(topPath.getPath())
+            }
         }
     }
 }
