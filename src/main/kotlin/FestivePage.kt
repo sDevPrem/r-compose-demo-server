@@ -399,7 +399,7 @@ private fun RcColumnScope.bazaarSection(scale: FestiveScale) {
                 fontSize = scale.sp(18f),
                 fontWeight = RcFontWeight.Bold
             )
-            Text("See all  →", color = Color.white.rgb, fontSize = scale.sp(16f), fontWeight = RcFontWeight.Bold)
+            Text("See all  →", color = Color.white.rgb, fontSize = scale.sp(12f), fontWeight = RcFontWeight.Bold)
         }
         Row(modifier = Modifier.horizontalScroll()) {
             Spacer(Modifier.width(scale.dp(8f)))
