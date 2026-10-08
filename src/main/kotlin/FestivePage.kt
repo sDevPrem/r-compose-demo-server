@@ -315,7 +315,8 @@ private fun RcColumnScope.bazaarSection(scale: FestiveScale) {
             )
             Text("See all  →", color = Color.white.rgb, fontSize = scale.sp(16f), fontWeight = RcFontWeight.Bold)
         }
-        Row(modifier = Modifier.horizontalScroll().padding(top = scale.dp(12f).value)) {
+        Row(modifier = Modifier.horizontalScroll()) {
+            Spacer(Modifier.width(scale.dp(8f)))
             bazaarProduct("Noise Earbuds", scale)
             Spacer(Modifier.width(scale.dp(8f)))
             bazaarProduct("Noise Nirvana", scale)
