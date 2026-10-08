@@ -44,44 +44,30 @@ import javax.imageio.ImageIO
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
+data class RemoteComposeCatalogueItem(
+    val route: String,
+    val content: (width: Int, height: Int, density: Float) -> ByteArray,
+)
+
+private val remoteComposeCatalogue = listOf(
+    RemoteComposeCatalogueItem(route = "/festive", content = ::festivePage),
+    RemoteComposeCatalogueItem(route = "/clock", content = ::clock),
+    RemoteComposeCatalogueItem(route = "/counter", content = ::counter),
+)
+
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         routing {
-            get("/festive") {
-                val width = call.request.queryParameters["w"]?.toIntOrNull() ?: 1080
-                val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
-                val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
+            remoteComposeCatalogue.forEach { item ->
+                get(item.route) {
+                    val width = call.request.queryParameters["w"]?.toIntOrNull() ?: 1080
+                    val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
+                    val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
+                    val bytes = item.content(width, height, density)
 
-                val bytes = festivePage(width, height, density)
-                println("bytes: ${bytes.size}")
-                call.respondBytes(
-                    bytes = bytes,
-                    contentType = ContentType.Application.OctetStream
-                )
-            }
-            get("/clock") {
-                val width = call.request.queryParameters["w"]?.toIntOrNull() ?: 1080
-                val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
-                val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
-
-                val bytes = clock(width, height, density)
-                println("bytes: ${bytes.size}")
-                call.respondBytes(
-                    bytes = bytes,
-                    contentType = ContentType.Application.OctetStream
-                )
-            }
-            get("/counter") {
-                val width = call.request.queryParameters["w"]?.toIntOrNull() ?: 1080
-                val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
-                val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
-
-                val bytes = counter(width, height, density)
-                println("bytes: ${bytes.size}")
-                call.respondBytes(
-                    bytes = bytes,
-                    contentType = ContentType.Application.OctetStream
-                )
+                    println("${item.route}: ${bytes.size} bytes")
+                    call.respondBytes(bytes, ContentType.Application.OctetStream)
+                }
             }
             get("/hosted-image.png") {
                 println("DEBUG: Android player requested the image URL!")
