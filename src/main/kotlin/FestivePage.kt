@@ -17,6 +17,8 @@ private object FestiveImages {
     const val bazaarProduct = "https://i.ibb.co/tTw6fHL8/Frame-2147205260.png"
     const val riderStory = "https://i.ibb.co/KphPWW3C/Landing-Page.png"
     const val bottomImg = "https://i.ibb.co/S4zR7Ydr/Frame-2147227287.png"
+    const val sectionTitleStart = "https://i.ibb.co/395ST1zp/Frame-2147227188.png"
+    const val sectionTitleEnd = "https://i.ibb.co/JjBZ6JmQ/Frame-2147227188-2.png"
 }
 
 private object FestiveColors {
@@ -49,8 +51,10 @@ fun festivePage(width: Int, height: Int, density: Float): ByteArray {
             horizontal = RcHorizontalPositioning.Center,
             vertical = RcVerticalPositioning.Bottom,
         ) {
-            Column {
-                // Only this column scrolls; the primary action below remains visible.
+            Column(
+                Modifier
+                    .fillMaxSize()
+            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -63,7 +67,7 @@ fun festivePage(width: Int, height: Int, density: Float): ByteArray {
                     // Existing campaign header content is intentionally kept intact.
                     Image(
                         remoteBitmapUrlWithBounds(url = FestiveImages.campaign, 720, 656),
-                        modifier = Modifier.fillParentMaxWidth().height((width / (720 / 656)).rdp),
+                        modifier = Modifier.fillMaxWidth().height((width / 1.097f)),
                         contentScale = RcContentScale.Crop,
                     )
 
@@ -265,7 +269,7 @@ private fun RcColumnScope.progressSummary(scale: FestiveScale) {
 }
 
 private fun RcColumnScope.earningSection(scale: FestiveScale) {
-    sectionTitle("❖  How to earn more  ❖", top = 28f, scale = scale)
+    sectionTitle("How to earn more", top = 20f, scale = scale)
     promoCard(
         title = "Check high-earning\ndays and plan your\nwork",
         action = "View calendar",
@@ -283,7 +287,7 @@ private fun RcColumnScope.earningSection(scale: FestiveScale) {
 }
 
 private fun RcColumnScope.benefitsSection(scale: FestiveScale) {
-    sectionTitle("❖  More benefits  ❖", top = 28f, scale = scale)
+    sectionTitle("More benefits", top = 20f, scale = scale)
     promoCard(
         title = "This festive season,\nearn up to ₹75,000\nwith referrals",
         action = "Refer now",
@@ -294,14 +298,30 @@ private fun RcColumnScope.benefitsSection(scale: FestiveScale) {
 }
 
 private fun RcColumnScope.sectionTitle(text: String, top: Float, scale: FestiveScale) {
-    Text(
-        text = text,
-        color = FestiveColors.gold,
-        fontSize = scale.sp(20f),
-        fontWeight = RcFontWeight.Bold,
-        textAlign = RcTextAlign.Center,
+    Row(
         modifier = Modifier.padding(top = scale.dp(top).value, bottom = scale.dp(12f).value),
-    )
+        horizontal = RcRowHorizontalPositioning.Center,
+        vertical = RcVerticalPositioning.Center,
+    ) {
+        Image(
+            remoteBitmapUrlWithBounds(FestiveImages.sectionTitleStart, 48, 26),
+            modifier = Modifier.width(scale.dp(24f)).height(scale.dp(13f)),
+            contentScale = RcContentScale.Fit,
+        )
+        Text(
+            text = text,
+            color = FestiveColors.gold,
+            fontSize = scale.sp(20f),
+            fontWeight = RcFontWeight.Bold,
+            textAlign = RcTextAlign.Center,
+            modifier = Modifier.padding(start = scale.dp(8f).value, end = scale.dp(8f).value),
+        )
+        Image(
+            remoteBitmapUrlWithBounds(FestiveImages.sectionTitleEnd, 48, 26),
+            modifier = Modifier.width(scale.dp(24f)).height(scale.dp(13f)),
+            contentScale = RcContentScale.Fit,
+        )
+    }
 }
 
 private fun RcColumnScope.promoCard(
@@ -510,7 +530,7 @@ private fun RcRowScope.bazaarProduct(name: String, scale: FestiveScale) {
 }
 
 private fun RcColumnScope.riderStoriesSection(scale: FestiveScale) {
-    sectionTitle("❖  Rider stories  ❖", top = 28f, scale = scale)
+    sectionTitle("Rider stories ", top = 28f, scale = scale)
     Row(modifier = Modifier.fillParentMaxWidth()) {
         Spacer(Modifier.width(scale.dp(8f)))
         riderStory("Navratri 🌸\npe crazy offers", scale)
