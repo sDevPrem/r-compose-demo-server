@@ -24,6 +24,8 @@ import androidx.compose.remote.creation.dsl.width
 import androidx.compose.remote.creation.modifiers.RecordingModifier
 import androidx.compose.remote.creation.profile.Profile
 import com.sdevprem.common.remoteBitmapUrlWithBounds
+import com.sdevprem.demo.clock
+import com.sdevprem.demo.festivePage
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.request.get
@@ -61,7 +63,7 @@ fun main(args: Array<String>) {
                 val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
                 val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
 
-                val bytes = _root_ide_package_.com.sdevprem.demo.clock(width, height, density)
+                val bytes = clock(width, height, density)
                 println("bytes: ${bytes.size}")
                 call.respondBytes(
                     bytes = bytes,
