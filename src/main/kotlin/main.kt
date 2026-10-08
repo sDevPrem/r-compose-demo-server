@@ -25,6 +25,7 @@ import androidx.compose.remote.creation.modifiers.RecordingModifier
 import androidx.compose.remote.creation.profile.Profile
 import com.sdevprem.common.remoteBitmapUrlWithBounds
 import com.sdevprem.demo.clock
+import com.sdevprem.demo.counter
 import com.sdevprem.demo.festivePage
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -64,6 +65,18 @@ fun main(args: Array<String>) {
                 val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
 
                 val bytes = clock(width, height, density)
+                println("bytes: ${bytes.size}")
+                call.respondBytes(
+                    bytes = bytes,
+                    contentType = ContentType.Application.OctetStream
+                )
+            }
+            get("/counter") {
+                val width = call.request.queryParameters["w"]?.toIntOrNull() ?: 1080
+                val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
+                val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
+
+                val bytes = counter(width, height, density)
                 println("bytes: ${bytes.size}")
                 call.respondBytes(
                     bytes = bytes,

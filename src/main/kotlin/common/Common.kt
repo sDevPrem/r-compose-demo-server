@@ -4,10 +4,14 @@ import androidx.compose.remote.core.CoreDocument
 import androidx.compose.remote.core.operations.Header
 import androidx.compose.remote.creation.JvmRcPlatformServices
 import androidx.compose.remote.creation.RemoteComposeWriter
+import androidx.compose.remote.creation.dsl.RcDp
 import androidx.compose.remote.creation.dsl.RcImage
 import androidx.compose.remote.creation.dsl.RcProfile
 import androidx.compose.remote.creation.dsl.RcScope
+import androidx.compose.remote.creation.dsl.RcSp
 import androidx.compose.remote.creation.dsl.createRcBuffer
+import androidx.compose.remote.creation.dsl.rdp
+import androidx.compose.remote.creation.dsl.rsp
 import androidx.compose.remote.creation.profile.Profile
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
@@ -60,4 +64,13 @@ fun prepareDoc(width: Int, height: Int, density: Float, content: RcScope.() -> U
         RemoteComposeWriter.hTag(Header.DOC_DENSITY_AT_GENERATION, density),
         content = content
     )
+}
+
+
+class ScreenScale(val widthPx: Int, density: Float) {
+    private val widthScale = widthPx / (360f * density)
+    private val pixelsPerDesignUnit = density * widthScale
+
+    fun dp(value: Float): RcDp = (value * pixelsPerDesignUnit).rdp
+    fun sp(value: Float): RcSp = (value * pixelsPerDesignUnit).rsp
 }
