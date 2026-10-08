@@ -1,4 +1,4 @@
-package com.sdevprem
+package com.sdevprem.common
 
 import androidx.compose.remote.core.CoreDocument
 import androidx.compose.remote.core.operations.Header

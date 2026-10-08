@@ -1,7 +1,6 @@
 package com.sdevprem
 
 import androidx.compose.remote.core.CoreDocument
-import androidx.compose.remote.core.RcPlatformServices
 import androidx.compose.remote.core.operations.Header
 import androidx.compose.remote.core.operations.layout.managers.ColumnLayout
 import androidx.compose.remote.core.operations.layout.managers.CoreText
@@ -9,31 +8,25 @@ import androidx.compose.remote.creation.JvmRcPlatformServices
 import androidx.compose.remote.creation.Rc
 import androidx.compose.remote.creation.RemoteComposeWriter
 import androidx.compose.remote.creation.dsl.Modifier
-import androidx.compose.remote.creation.dsl.RcColumnScope
 import androidx.compose.remote.creation.dsl.RcColumnVerticalPositioning
 import androidx.compose.remote.creation.dsl.RcContentScale
 import androidx.compose.remote.creation.dsl.RcHorizontalPositioning
 import androidx.compose.remote.creation.dsl.RcImage
-import androidx.compose.remote.creation.dsl.RcPaintStyle
 import androidx.compose.remote.creation.dsl.RcProfile
 import androidx.compose.remote.creation.dsl.RcScope
-import androidx.compose.remote.creation.dsl.RcStrokeCap
 import androidx.compose.remote.creation.dsl.background
 import androidx.compose.remote.creation.dsl.createRcBuffer
 import androidx.compose.remote.creation.dsl.fillMaxSize
-import androidx.compose.remote.creation.dsl.fillMaxWidth
 import androidx.compose.remote.creation.dsl.height
 import androidx.compose.remote.creation.dsl.padding
 import androidx.compose.remote.creation.dsl.rdp
-import androidx.compose.remote.creation.dsl.setStrokeCap
-import androidx.compose.remote.creation.dsl.setStyle
 import androidx.compose.remote.creation.dsl.width
 import androidx.compose.remote.creation.modifiers.RecordingModifier
 import androidx.compose.remote.creation.profile.Profile
+import com.sdevprem.common.remoteBitmapUrlWithBounds
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.request.get
-import io.ktor.client.statement.readBytes
 import io.ktor.client.statement.readRawBytes
 import io.ktor.http.*
 import io.ktor.server.engine.*
@@ -44,7 +37,6 @@ import kotlinx.coroutines.runBlocking
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.lang.reflect.Field
 import javax.imageio.ImageIO
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
@@ -58,6 +50,18 @@ fun main(args: Array<String>) {
                 val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
 
                 val bytes = festivePage(width, height, density)
+                println("bytes: ${bytes.size}")
+                call.respondBytes(
+                    bytes = bytes,
+                    contentType = ContentType.Application.OctetStream
+                )
+            }
+            get("/clock") {
+                val width = call.request.queryParameters["w"]?.toIntOrNull() ?: 1080
+                val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
+                val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
+
+                val bytes = _root_ide_package_.com.sdevprem.demo.clock(width, height, density)
                 println("bytes: ${bytes.size}")
                 call.respondBytes(
                     bytes = bytes,
@@ -178,66 +182,6 @@ fun main2(width: Int, height: Int, density: Float): ByteArray {
     return bytes
 }
 
-private fun RcColumnScope.clock() {
-    Box(Modifier.fillMaxSize()) {
-        Canvas(Modifier.fillMaxSize()) {
-            val w = componentWidth()
-            val h = componentHeight()
-            val cx = (w / 2f)
-            val cy = (h / 2f)
-            val rad = min(cx, cy)
-            val strokeWidth = (rad / 6f)
-
-            applyPaint {
-                setStyle(RcPaintStyle.Stroke)
-                setColor(0xFF333333.toInt())
-                setStrokeWidth(rad * 0.03f)
-            }
-            drawCircle(cx, cy, rad * 0.98f)
-
-            val textSize = rad / 5f
-            applyPaint {
-                setColor(0xFFEEEEEE.toInt())
-                setTextSize(textSize)
-            }
-
-            applyPaint {
-                setColor(0xFF0000FF.toInt())
-                setStrokeWidth(strokeWidth)
-                setStrokeCap(RcStrokeCap.Round)
-            }
-
-            val hrHand = (hour() + (minutes() % 60f) / 60f) * 30f
-            save {
-                rotate(hrHand, cx, cy)
-                drawLine(cx, cy, cx, cy - rad / 3f)
-            }
-
-            applyPaint {
-                setColor(0xFF00FF00.toInt())
-                setStrokeWidth(strokeWidth)
-                setStrokeCap(RcStrokeCap.Round)
-            }
-            save {
-                rotate(minutes() * 6f, cx, cy)
-                drawLine(cx, cy, cx, cy - rad * 0.6f)
-            }
-
-            save {
-                rotate(seconds() * 6f, cx, cy)
-                val radius = rad * 0.1f
-                applyPaint {
-                    setStyle(RcPaintStyle.Fill)
-                    setColor(0xFFFF0000.toInt())
-                }
-                drawCircle(cx, cy - rad + (2f.rf * radius), radius)
-
-                rotate(70.rf, cx, cy)
-                applyPaint { setColor(0xFF000000.toInt()) }
-            }
-        }
-    }
-}
 
 fun getBufferedImage(): BufferedImage {
     val imageBytes = runBlocking {

@@ -1,8 +1,9 @@
-package com.sdevprem
+package com.sdevprem.demo
 
 import androidx.compose.remote.creation.dsl.*
 import androidx.compose.remote.creation.modifiers.RoundedRectShape
-import com.sdevprem.FestiveColors.ctaBGColor
+import com.sdevprem.common.prepareDoc
+import com.sdevprem.common.remoteBitmapUrlWithBounds
 import java.awt.Color
 
 /**
@@ -582,7 +583,7 @@ private fun RcColumnScope.stickyBookGigsButton(scale: FestiveScale) {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(ctaBGColor)
+            .background(_root_ide_package_.com.sdevprem.demo.FestiveColors.ctaBGColor)
             .padding(scale.dp(12f))
             .fillMaxWidth()
             .clip(rounded(scale.dp(6f).value))
