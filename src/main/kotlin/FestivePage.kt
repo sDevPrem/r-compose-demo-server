@@ -10,7 +10,7 @@ import java.awt.Color
  * they are available; the cards are already sized to use a centre crop.
  */
 private object FestiveImages {
-    const val campaign = "https://i.ibb.co/QwtGBpj/Durga-Puja.png"
+    const val campaign = "https://i.ibb.co/pjfvrDN4/Durga-Puja.png"
     const val earningCalendar = "https://i.ibb.co/ymYdmhLr/336-X152-2.png"
     const val coach = "https://i.ibb.co/ymYdmhLr/336-X152-2.png"
     const val referrals = "https://i.ibb.co/ymYdmhLr/336-X152-2.png"
