@@ -53,7 +53,11 @@ fun main(args: Array<String>) {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         routing {
             get("/remote-ui/text") {
-                val bytes = main2()
+                val width = call.request.queryParameters["w"]?.toIntOrNull() ?: 1080
+                val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
+                val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
+
+                val bytes = main2(width, height)
                 println("bytes: ${bytes.size}")
                 call.respondBytes(
                     bytes = bytes,
@@ -130,9 +134,7 @@ private fun main3(): ByteArray {
     return binaryPayload
 }
 
-fun main2(): ByteArray {
-    val width = 1200
-    val height = 600
+fun main2(width: Int, height: Int): ByteArray {
     var writer: RemoteComposeWriter? = null
 
     val profile = Profile(
