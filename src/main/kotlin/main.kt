@@ -52,7 +52,7 @@ import kotlin.reflect.jvm.isAccessible
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         routing {
-            get("/remote-ui/text") {
+            get("/festive") {
                 val width = call.request.queryParameters["w"]?.toIntOrNull() ?: 1080
                 val height = call.request.queryParameters["h"]?.toIntOrNull() ?: 2400
                 val density = call.request.queryParameters["d"]?.toFloatOrNull() ?: 1f
