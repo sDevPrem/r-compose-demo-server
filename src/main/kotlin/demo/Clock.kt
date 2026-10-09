@@ -1,5 +1,6 @@
 package com.sdevprem.demo
 
+import androidx.compose.remote.core.operations.layout.AnimatableValue
 import androidx.compose.remote.creation.dsl.Modifier
 import androidx.compose.remote.creation.dsl.RcPaintStyle
 import androidx.compose.remote.creation.dsl.RcScope
@@ -60,7 +61,7 @@ private fun RcScope.clock() {
             }
 
             save {
-                rotate(seconds() * 6f, cx, cy)
+                rotate((continuousSeconds() % 60f) * 6f, cx, cy)
                 val radius = rad * 0.1f
                 applyPaint {
                     setStyle(RcPaintStyle.Fill)
