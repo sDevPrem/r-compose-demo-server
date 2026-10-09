@@ -1,17 +1,6 @@
 package com.sdevprem.demo
 
-import androidx.compose.remote.creation.dsl.Modifier
-import androidx.compose.remote.creation.dsl.RcActionScope
-import androidx.compose.remote.creation.dsl.RcFloat
-import androidx.compose.remote.creation.dsl.RcHorizontalPositioning
-import androidx.compose.remote.creation.dsl.RcInteger
-import androidx.compose.remote.creation.dsl.RcVerticalPositioning
-import androidx.compose.remote.creation.dsl.background
-import androidx.compose.remote.creation.dsl.fillMaxSize
-import androidx.compose.remote.creation.dsl.onClick
-import androidx.compose.remote.creation.dsl.padding
-import androidx.compose.remote.creation.dsl.wrapContentHeight
-import androidx.compose.remote.creation.dsl.wrapContentSize
+import androidx.compose.remote.creation.dsl.*
 import com.sdevprem.common.ScreenScale
 import com.sdevprem.common.prepareDoc
 import java.awt.Color
