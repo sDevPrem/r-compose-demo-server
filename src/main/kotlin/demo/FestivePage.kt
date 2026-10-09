@@ -32,6 +32,12 @@ private object FestiveColors {
     const val ctaBGColor = 0xFF750708.toInt()
 }
 
+private object FestiveActionIds {
+    const val ViewCalendar = 1_001
+    const val CallCoach = 1_002
+    const val ReferNow = 1_003
+}
+
 /**
  * Remote Compose alpha20 writes dp/sp wrappers as raw values. Convert the design values here
  * instead of relying on the player's incomplete density conversion support.
@@ -265,7 +271,29 @@ private fun RcColumnScope.progressSummary(scale: FestiveScale) {
                     modifier = Modifier.padding(top = scale.dp(2f).value, start = scale.dp(8f).value),
                 )
             }
+            //your earning
+            earningProgress(scale)
         }
+    }
+}
+
+private fun RcColumnScope.earningProgress(scale: FestiveScale) {
+    Row(
+        Modifier.padding(top = scale.dp(12f).value, start = scale.dp(8f).value)
+    ) {
+        Text(
+            text = "Your earning: ",
+            color = Color.white.rgb,
+            fontSize = scale.sp(14f),
+            fontWeight = RcFontWeight.SemiBold,
+        )
+        Text(
+            text = "₹20,000",
+            color = Color.white.rgb,
+            fontSize = scale.sp(14f),
+            fontWeight = RcFontWeight.SemiBold,
+            modifier = Modifier.padding(start = scale.dp(2f).value),
+        )
     }
 }
 
@@ -275,6 +303,7 @@ private fun RcColumnScope.earningSection(scale: FestiveScale) {
         title = "Check high-earning\ndays and plan your\nwork",
         action = "View calendar",
         imageUrl = FestiveImages.earningCalendar,
+        actionId = FestiveActionIds.ViewCalendar,
         scale = scale,
         topPadding = scale.dp(12f).value,
     )
@@ -282,6 +311,7 @@ private fun RcColumnScope.earningSection(scale: FestiveScale) {
         title = "Ask coach how to\nboost your earnings",
         action = "☎  Call coach",
         imageUrl = FestiveImages.coach,
+        actionId = FestiveActionIds.CallCoach,
         scale = scale,
         topPadding = 0f,
     )
@@ -293,6 +323,7 @@ private fun RcColumnScope.benefitsSection(scale: FestiveScale) {
         title = "This festive season,\nearn up to ₹75,000\nwith referrals",
         action = "Refer now",
         imageUrl = FestiveImages.referrals,
+        actionId = FestiveActionIds.ReferNow,
         scale = scale,
         topPadding = scale.dp(12f).value,
     )
@@ -329,9 +360,11 @@ private fun RcColumnScope.promoCard(
     title: String,
     action: String,
     imageUrl: String,
+    actionId: Int,
     scale: FestiveScale,
     topPadding: Float,
 ) {
+    val actionMetadata = remoteText(action)
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -345,6 +378,7 @@ private fun RcColumnScope.promoCard(
             .clip(rounded(scale.dp(12f).value))
             .background(FestiveColors.card)
             .border(scale.dp(1f).value, scale.dp(12f).value, FestiveColors.gold, 2)
+            .onClick { hostAction(actionId, actionMetadata) }
     ) {
         // The crop intentionally shares the same source until distinct campaign art is supplied.
         Image(
