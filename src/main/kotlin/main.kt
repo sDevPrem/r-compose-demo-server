@@ -24,8 +24,10 @@ import androidx.compose.remote.creation.dsl.width
 import androidx.compose.remote.creation.modifiers.RecordingModifier
 import androidx.compose.remote.creation.profile.Profile
 import com.sdevprem.common.remoteBitmapUrlWithBounds
+import com.sdevprem.demo.brewCraftPage
 import com.sdevprem.demo.clock
 import com.sdevprem.demo.counter
+import com.sdevprem.demo.expandableCard
 import com.sdevprem.demo.festivePage
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -51,8 +53,10 @@ data class RemoteComposeCatalogueItem(
 
 private val remoteComposeCatalogue = listOf(
     RemoteComposeCatalogueItem(route = "/festive", content = ::festivePage),
+    RemoteComposeCatalogueItem(route = "/brewcraft", content = ::brewCraftPage),
     RemoteComposeCatalogueItem(route = "/clock", content = ::clock),
     RemoteComposeCatalogueItem(route = "/counter", content = ::counter),
+    RemoteComposeCatalogueItem(route = "/expandable-card", content = ::expandableCard),
 )
 
 fun main(args: Array<String>) {
